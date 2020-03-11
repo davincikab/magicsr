@@ -39,6 +39,15 @@ var places  = L.geoJson(null,{
         return {
 
         }
+    },
+    pointToLayer:function(geojsonObj, latlng){
+        let icon = L.divIcon({
+            className:'div-marker',
+            html:"<p class='text-warning text-sm bold w-50'>"+geojsonObj.properties['Name NGO']+"</p>"
+        })
+        return L.marker(latlng, {
+            icon:icon
+        });
     }
 
 }).addTo(map);
@@ -59,8 +68,11 @@ function populateData(data){
     data.features.forEach(function(feature){
         let content = "<section id ='"+ feature.properties.fid+"'>"+
             "<h5>"+feature.properties['Name NGO']+"</h5>"+
-            "<p>"+feature.properties.Description+"<p>"+
-            ""
+            "<p class=''>"+feature.properties.Description.toString().slice(0,100)+
+            // "<img class='d-inline' src='./images/interiors.jpg' height=200 width=300>"+
+            feature.properties.Description.toString().slice(100,) +
+            "<p>"+
+            "<img class='' src='./images/markets.jpg' height=200 width=300>"+
         "</section>";
         section.push(content);
     });
