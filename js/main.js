@@ -7,12 +7,25 @@ var map = L.map('map',{
     minZoom:9
 });
 
+// remove zoom control
+map.zoomControl.remove();
+
 // Add a tilelayers
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 
-osm.addTo(map);
+// osm.addTo(map);
+
+var layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}' + (L.Browser.retina ? '@2x.png' : '.png'), {
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 20,
+    minZoom: 0
+});
+
+layer.addTo(map);
+
 
 // Load the data Layers
 var places  = L.geoJson(null,{
@@ -104,4 +117,5 @@ L.control.timelineSlider({
     timelineItems: ["2009", "2010", "2011", "2015", "2020"],
     changeMap: getDataAddMarkers,
     extraChangeMapParams: { exclamation: "Hello World!" }
-}).addTo(map);   
+})
+// .addTo(map);   

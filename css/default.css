@@ -1,25 +1,35 @@
 body, html{
-    margin:0%;
-    padding:0%
+    margin:0px;
+    padding:0px;
 }
 
 .container-fluid, .row{
-    margin:0%;
-    padding: 0%;
+    margin:0px;
+    padding:0px;
 }
 
 #map{
     height: 100vh;
     width:100%;
+    position: fixed;
+    opacity: 0.8;
 }
 
 /* Set custom fonts */
 #content{
+    top:0%;
+    left:2%;
+    right:0%;
+    color:rgb(247, 246, 244);
+    position:fixed;
     overflow-y: scroll;
-    background-color: #fafafa;
+    /* background-color: #fafafa80; */
     height: 100vh;
+    z-index:3000;
 }
+
 section {
+    width: 40%;
     padding: 25px 50px;
     line-height: 25px;
     border-bottom: 1px solid #ddd;
@@ -36,7 +46,7 @@ section:last-child{
     opacity: 1;
 }
 
-.col-md-8,.col-md-4{
+.col-md-8,.col-md-4, col-md-12{
     margin: 0px;
     padding: 0px;
 }
@@ -59,9 +69,15 @@ section:last-child{
 }
 
 @media screen and (max-width: 768px){
+    .container-fluid{
+        margin:0%;
+        padding:0px;
+    }
     #map{
-        height:50vh;
-        width:98%;
-        margin-right:4px;
+        height:100vh;
+        width: 100%;
+    }
+    #content section{
+        width:100%;
     }
 }
