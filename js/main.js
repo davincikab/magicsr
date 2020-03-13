@@ -129,5 +129,5 @@ L.control.timelineSlider({
     timelineItems: ["2009", "2010", "2011", "2015", "2020"],
     changeMap: getDataAddMarkers,
     extraChangeMapParams: { exclamation: "Hello World!" }
-})
+});
 // .addTo(map);   
