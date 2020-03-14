@@ -1,5 +1,14 @@
 // Initialize a map object
 var data_url = "../data/places.geojson";
+var imageContainer = $('#images');
+var yearSlider = $("#ex13").slider({
+    ticks: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
+    ticks_labels: ['2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'],
+    ticks_snap_bounds: 30,
+
+});
+var currentPlace = 'Upasana';
+
 var map = L.map('map', {
     center: [11.986744135673385, 79.81807708740236],
     zoom: 13,
@@ -7,6 +16,26 @@ var map = L.map('map', {
     minZoom: 9
 });
 
+// Image url for various 
+var imagesUrl = [{
+    "Upasana":{
+        "2011": ["Ecofemme_blog entry_building.jpg"],
+        "2012":[],
+        "2013":[],
+        "2014":[]
+    },
+},{
+    "WasteLess":{
+        "2011": [],
+        "2012": [],
+        "2013": ["Mohanam Village Heritage Center_2019-20_children playing AUP student.jpg"],
+        "2014": ["Ecofemme_blog entry_building.jpg"],
+        "2019": ["Wasteless_2019-20_wasteless team AUP students.jpg"]
+    }
+}
+];
+
+console.log(images);
 // remove zoom control
 map.zoomControl.remove();
 
@@ -54,15 +83,22 @@ var places = L.geoJson(null, {
 
 }).addTo(map);
 
+// Zoom to the feature
 function zoomToFeature(e){
     var layer = e.target;
     map.flyTo(layer.getLatLng(),16);
 
     // Scroll to the layer
-    var layerId = layer.feature.properties.fid;
-    document.getElementById(layerId).scrollIntoView();
-    updateActivePlaceClass(layerId);
+    currentPlace = layer.feature.properties['Name NGO']
+    scrollToPlaceDescription(layer.feature.properties.fid);
+    
 }
+
+function scrollToPlaceDescription(placeId){
+    document.getElementById(placeId).scrollIntoView();
+    updateActivePlaceClass(placeId);
+}
+
 // read the data using jquery getJSON method    
 $.getJSON(data_url)
     .done(function (data) {
@@ -151,28 +187,45 @@ var searchNgoControl = new L.Control.Search({
 });
 
 searchNgoControl.on('search:locationfound', function(e){
+    // Upadate the current place name
+    currentPlace = e.layer.feature.properties['Name NGO'];
+
+    // Open popup
     if (e.layer._popup){
          e.layer.openPopup();
     }
 
+    // Scroll to the layer description 
+    scrollToPlaceDescription(e.layer.feature.properties.fid);
 }).on('search:collapsed', function (e) {
     e.layer.closePopup();
 });
 
 searchNgoControl.addTo(map);
 
-// With JQuery
-$("#ex13").slider({
-    ticks: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
-    ticks_labels: ['2011', '2012', '2013', '2014', '2015','2016', '2017','2018','2019','2020'],
-    ticks_snap_bounds: 30,
-    
-}).on('slideStop', function (e) {
+// Year Slider Event Listener
+yearSlider.on('slideStop', function (e) {
     console.log(e.value);
-    updatePictures(e.value,);
+    updatePictures(e.value,currentPlace);
 });
 
-// Upadate the 
-function updatePictures(year){
+// Upadate the images per year according to the 
+function updatePictures(year, currentPlace){
+    console.log(year, currentPlace);
+    // Get images for current year and place
+    var activePlaceImages = imagesUrl.find(image => image[currentPlace]);
+    activePlaceImages = activePlaceImages[currentPlace][year];
 
+    // Create image element
+    var images = [];
+    activePlaceImages.forEach(function(image){
+        images.push(
+            "<img src='./images/image/"+image +"' alt='"+currentPlace+"' class='img-thumbnail' height='300' width='300'>"
+        );
+    });
+    // Append the images to the images view
+    imageContainer.append(images);
+    console.log(activePlaceImages);
 }
+
+updatePictures(2011, currentPlace);
