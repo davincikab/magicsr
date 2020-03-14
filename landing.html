@@ -12,12 +12,6 @@
     <link rel="stylesheet" href="css/leaflet-search.css">
     <link rel="stylesheet" href="css/landing.css">
 
-    <style>
-        .slider.slider-horizontal{
-            width:800px;
-            margin-top: 12px;
-        }
-    </style>
 </head>
 
 <body>
@@ -31,25 +25,47 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="container-fluid  text-dark pb-4">
             <!-- Range Slider -->
-        <div class="container w-100">
-            <input id="ex13" type="text" 
-            data-slider-ticks="[2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]" 
-            data-slider-ticks-snap-bounds="30"
-            data-slider-step="1"
-            data-slider-ticks-labels="['2011', '2012', '2013', '2014', '2015','2016', '2017','2018','2019','2020']"
-             
-            />
-        </div>
-       
-            <div class="row bg-light"  id="images">
-                <!-- Images -->
+            <div class="container w-100 ">
+                <input id="ex13" type="text" 
+                data-slider-ticks="[2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]" 
+                data-slider-ticks-snap-bounds="30"
+                data-slider-step="1"
+                data-slider-ticks-labels="['2011', '2012', '2013', '2014', '2015','2016', '2017','2018','2019','2020']"
                 
+                />
+            </div>
+    
+            <div id="placesCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row" id="item_one">
+                        </div>
+                    
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row" id="item_two">
+                            
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row" id="item_three">
+                    
+                        </div>
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#placesCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#placesCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
         </div>
     </div>
-
 
     <script src="js/jquery.min.js"></script>
     <script src="js/leaflet.js"></script>

@@ -19,8 +19,9 @@ var map = L.map('map', {
 // Image url for various 
 var imagesUrl = [{
     "Upasana":{
-        "2011": ["Ecofemme_blog entry_building.jpg"],
-        "2012":[],
+        "2011": ["Ecofemme_blog entry_building.jpg", "cleanings.jpg", "codes.jpg", "markets.jpg", "cleanings.jpg", "codes.jpg", 
+                 "markets.jpg", "cleanings.jpg", "codes.jpg", "markets.jpg"],
+        "2012": ["codes.jpg","markets.jpg"],
         "2013":[],
         "2014":[]
     },
@@ -32,10 +33,18 @@ var imagesUrl = [{
         "2014": ["Ecofemme_blog entry_building.jpg"],
         "2019": ["Wasteless_2019-20_wasteless team AUP students.jpg"]
     }
-}
+},{
+        "Auroville Consulting": {
+            "2011": ["markets.jpg",'codes.jpg'],
+            "2012": [], 
+            "2013": ["Mohanam Village Heritage Center_2019-20_children playing AUP student.jpg"],
+            "2014": ["Ecofemme_blog entry_building.jpg"],
+            "2019": ["Wasteless_2019-20_wasteless team AUP students.jpg"]
+        }
+    }
 ];
 
-console.log(images);
+
 // remove zoom control
 map.zoomControl.remove();
 
@@ -46,7 +55,7 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // osm.addTo(map);
 
-var layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}' + (L.Browser.retina ? '@2x.png' : '.png'), {
+var layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}' + (L.Browser.retina ? '@2x.png' : '.png'), {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
     maxZoom: 20,
@@ -77,7 +86,7 @@ var places = L.geoJson(null, {
             html: "<p class='text-warning text-sm bold w-50'>" + geojsonObj.properties['Name NGO'] + "</p>"
         })
         return L.marker(latlng, {
-            icon: icon
+            // icon: icon
         });
     }
 
@@ -89,7 +98,8 @@ function zoomToFeature(e){
     map.flyTo(layer.getLatLng(),16);
 
     // Scroll to the layer
-    currentPlace = layer.feature.properties['Name NGO']
+    currentPlace = layer.feature.properties['Name NGO'];
+    updatePictures(2011, currentPlace);
     scrollToPlaceDescription(layer.feature.properties.fid);
     
 }
@@ -115,11 +125,9 @@ function populateData(data) {
     data.features.forEach(function (feature) {
         let content = "<section id ='" + feature.properties.fid + "'>" +
             "<h5>" + feature.properties['Name NGO'] + "</h5>" +
-            "<p class=''>" + feature.properties.Description.toString().slice(0, 100) +
-            // "<img class='d-inline' src='./images/interiors.jpg' height=200 width=300>"+
-            feature.properties.Description.toString().slice(100) +
+            "<p class=''>" + feature.properties.Description.toString() +
             "<p>" +
-            "<img class='' src='./images/markets.jpg' height=200 width=300>" +
+            // "<img class='' src='./images/markets.jpg' height=200 width=300>" +
             "</section>";
         section.push(content);
     });
@@ -128,7 +136,7 @@ function populateData(data) {
     $('#1').addClass('active');
 }
 
-// Handle Window scroll
+// Handle content scroll event
 let content = document.getElementById('content');
 
 content.onscroll = function () {
@@ -143,14 +151,19 @@ content.onscroll = function () {
 
 }
 
+// Active place data
 var activePlace = "1";
 function setActivePlace(place) {
     if (place == activePlace) return;
 
+    // Flyto the map oobject
     places.eachLayer(function (layer) {
         if (layer.feature.properties.fid == place) {
             map.flyTo(layer.getLatLng(), 16);
             layer.openPopup();
+
+            currentPlace = layer.feature.properties['Name NGO']
+            updatePictures(2011, currentPlace);
         }
     });
 
@@ -186,6 +199,7 @@ var searchNgoControl = new L.Control.Search({
     }
 });
 
+// Sear found event handler
 searchNgoControl.on('search:locationfound', function(e){
     // Upadate the current place name
     currentPlace = e.layer.feature.properties['Name NGO'];
@@ -197,6 +211,7 @@ searchNgoControl.on('search:locationfound', function(e){
 
     // Scroll to the layer description 
     scrollToPlaceDescription(e.layer.feature.properties.fid);
+    updatePictures(2011, currentPlace);
 }).on('search:collapsed', function (e) {
     e.layer.closePopup();
 });
@@ -210,22 +225,50 @@ yearSlider.on('slideStop', function (e) {
 });
 
 // Upadate the images per year according to the 
-function updatePictures(year, currentPlace){
-    console.log(year, currentPlace);
+function updatePictures(year, place){
+    console.log(year, currentPlace, place);
     // Get images for current year and place
-    var activePlaceImages = imagesUrl.find(image => image[currentPlace]);
-    activePlaceImages = activePlaceImages[currentPlace][year];
-
-    // Create image element
-    var images = [];
-    activePlaceImages.forEach(function(image){
-        images.push(
-            "<img src='./images/image/"+image +"' alt='"+currentPlace+"' class='img-thumbnail' height='300' width='300'>"
-        );
+    var activePlaceImages = imagesUrl.find(image => {
+        return image[place];
     });
+
+    console.log(activePlaceImages);
+    activePlaceImages = activePlaceImages[place]?activePlaceImages[place][year]:[];
+
+    // Create image carousel
+    var imagesOne = [];
+    var imagesTwo = [];
+    var imagesThree = [];
+    activePlaceImages.forEach(function(image, i){
+        if (i >= 0 && i < 4){
+            imagesOne.push(
+                "<div class='col-md-3'><img src='./images/image/" + image + "' alt='" + place + "' class='img-responsive ml-2 mb-1'></div>"
+            );
+        } else if (i >= 4 && i < 8){
+            imagesTwo.push(
+                "<div class='col-md-3'><img src='./images/image/" + image + "' alt='" + place + "' class='img-responsive ml-2 mb-1' ></div>"
+            );
+        }else{
+            imagesThree.push(
+                "<div class='col-md-3'><img src='./images/image/" + image + "' alt='" + place + "' class='img-responsive ml-2 mb-1'></div>"
+            );
+        }
+        
+    });
+
+    $('#item_one').empty();
+    $('#item_two').empty();
+    $('#item_three').empty();
+    
+    $('#item_one').append(imagesOne);
+    $('#item_two').append(imagesTwo);
+    $('#item_three').append(imagesThree);
+
+   
     // Append the images to the images view
-    imageContainer.append(images);
     console.log(activePlaceImages);
 }
 
 updatePictures(2011, currentPlace);
+
+// Carousel Modal
