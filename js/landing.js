@@ -1,5 +1,5 @@
 // Initialize a map object
-var data_url = "../data/places.geojson";
+var data_url = "data/places.geojson";
 var imageContainer = $('#images');
 var yearSlider = $("#ex13").slider({
     ticks: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
