@@ -1,5 +1,5 @@
 // Initialize a map object
-var data_url = "../data/places.geojson";
+var data_url = "data/places.geojson";
 var map = L.map('map',{
     center: [11.986744135673385, 79.81807708740236],
     zoom:13,
